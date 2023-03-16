@@ -2,6 +2,11 @@
 
 > A Vue.js project with Vite & BalmUI
 
+## Requirements
+
+- Windows: `npm i -g balm-git-flow@legacy`
+- Linux: `npm i -g balm-git-flow`
+
 ## Installation
 
 - For vue3
@@ -33,6 +38,9 @@ npm run dev
 
 # For production
 npm run build
+
+# For deploy
+balm-git prod
 ```
 
 - thx [BalmJS](https://github.com/balmjs/balm) and [Vite](https://github.com/vitejs/vite)

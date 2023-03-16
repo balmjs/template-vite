@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { useBus } from 'balm-ui';
-import { API_ENDPOINT } from '@/config';
+import axios from "axios";
+import { useBus } from "balm-ui";
+import { API_ENDPOINT } from "@/config";
 
 const statusCodes = {
   // Successful
@@ -12,7 +12,7 @@ const statusCodes = {
   // Error
   Unauthorized: 401, // Not authenticated
   Forbidden: 403, // Authenticated, but no permissions
-  UnprocessableEntity: 422 // Validation
+  UnprocessableEntity: 422, // Validation
 };
 
 const successStatusCodes = [
@@ -20,20 +20,20 @@ const successStatusCodes = [
   statusCodes.Created,
   statusCodes.Accepted,
   statusCodes.NoContent,
-  statusCodes.PartialContent
+  statusCodes.PartialContent,
 ];
 
 const httpErrorMessage = {
-  default: 'Operation failure',
-  response: 'Response error',
-  request: 'Request error',
-  unknown: 'Unknown error'
+  default: "Operation failure",
+  response: "Response error",
+  request: "Request error",
+  unknown: "Unknown error",
 };
 
 const bus = useBus();
 
 function errorHandler({ message }) {
-  bus.emit('on-error', message || httpErrorMessage.default);
+  bus.emit("on-error", message || httpErrorMessage.default);
 }
 
 axios.interceptors.request.use(
@@ -63,15 +63,15 @@ axios.interceptors.response.use(
     if (error.response) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
-      bus.emit('on-error', httpErrorMessage.response);
+      bus.emit("on-error", httpErrorMessage.response);
     } else if (error.request) {
       // The request was made but no response was received
       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
       // http.ClientRequest in node.js
-      bus.emit('on-error', httpErrorMessage.request);
+      bus.emit("on-error", httpErrorMessage.request);
     } else {
       // Something happened in setting up the request that triggered an Error
-      bus.emit('on-error', httpErrorMessage.unknown);
+      bus.emit("on-error", httpErrorMessage.unknown);
     }
 
     return Promise.reject(error);
@@ -81,12 +81,11 @@ axios.interceptors.response.use(
 const useHttp = () => axios;
 
 export default {
-  install(app) {
+  install(Vue) {
     axios.defaults.baseURL = API_ENDPOINT;
     // axios.defaults.withCredentials = true;
 
-    app.config.globalProperties.$http = axios;
-    app.provide('http', axios);
-  }
+    Vue.prototype.$http = axios;
+  },
 };
 export { useHttp };
